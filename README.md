@@ -9,7 +9,9 @@ This is a helpful tool for scheduling your work day. It was created using starte
 
 # Author
 Michael Engstrand
-Repo Link:
+
+*Repo Link:
 https://github.com/mikeengstrand/work-day-scheduler
-Live Link:
+
+*Live Link:
 https://mikeengstrand.github.io/work-day-scheduler/
