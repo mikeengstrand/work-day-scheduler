@@ -1,44 +1,65 @@
-// Wrap all code that interacts with the DOM in a call to jQuery to ensure that
-// the code isn't run until the browser has finished rendering all the elements
-// in the html.
-
-//gobal var
+// Global var
 var timeDisplay = $('#currentDay')
-var calendar = document.querySelector('#scehdlue-container')
+// Ref the schedule container
+var calendar = document.querySelector('.scehdlue-container')
+// Use dayjs to show current hour, this will be used to select which class should be used in each hour ID in the html
+var today = dayjs().format('H')
 
-
-
-$(function trackTask() {
-  // TODO: Add a listener for click events on the save button. This code should
-  // use the id in the containing time-block as a key to save the user input in
-  // local storage. HINT: What does `this` reference in the click listener
-  // function? How can DOM traversal be used to get the "hour-x" id of the
-  // time-block containing the button that was clicked? How might the id be
-  // useful when saving the description in local storage?
-  
-
-
-  // TODO: Add code to apply the past, present, or future class to each time
-  // block by comparing the id to the current hour. HINTS: How can the id
-  // attribute of each time-block be used to conditionally add or remove the
-  // past, present, and future classes? How can Day.js be used to get the
-  // current hour in 24-hour time?
-  
-
-
-  // TODO: Add code to get any user input that was saved in localStorage and set
-  // the values of the corresponding textarea elements. HINT: How can the id
-  // attribute of each time-block be used to do this?
-  
-
-});
-
-//this will be used in the index.html file to show the current day/time in the header
-function showtime(){
+// // This will be used in the index.html file to show the current day/time in the header
+function showtime() {
   var timeNow = dayjs().format('MMM DD, YYYY [at] hh:mm:ss a');
   timeDisplay.text(timeNow);
 }
 
+function trackTask() {
+  // Event listener for the save buttons using dom traversal parent and sibling properties
+  $(".saveBtn").on('click', function () {
+    var saveText = $(this).siblings('.description').val();
+    // pull up the id
+    var timeId = $(this).parent().attr('id');
+    // toss it into local storage
+    localStorage.setItem(timeId, saveText);
+  });
+
+  // Use the ID to save each updated item into local storage
+  $('#hour-9 .description').val(localStorage.getItem('hour-9'))
+  $('#hour-10 .description').val(localStorage.getItem('hour-10'))
+  $('#hour-11 .description').val(localStorage.getItem('hour-11'))
+  $('#hour-12 .description').val(localStorage.getItem('hour-12'))
+  $('#hour-13 .description').val(localStorage.getItem('hour-13'))
+  $('#hour-14 .description').val(localStorage.getItem('hour-14'))
+  $('#hour-15 .description').val(localStorage.getItem('hour-15'))
+  $('#hour-16 .description').val(localStorage.getItem('hour-16'))
+  $('#hour-16 .description').val(localStorage.getItem('hour-16'))
+
+
+  // Go through each hour ID in the time-block class
+  $('.time-block').each(function () {
+    var currentTime = today;
+    console.log(currentTime)
+    var compToCurrentTime = parseInt($(this).attr('id').split('hour-')[1])
+    // compare the hour in time block with currentTime, if the hour less than the current time we apply the class of past. This will use the starting code css classes
+    if (compToCurrentTime < currentTime) {
+      $(this).removeClass('present');
+      $(this).removeClass('future');
+      $(this).addClass('past');
+
+    } else if (compToCurrentTime == currentTime) {
+      $(this).removeClass('past');
+      $(this).removeClass('future');
+      $(this).addClass('present');
+    } else {
+      $(this).removeClass('past');
+      $(this).removeClass('present');
+      $(this).addClass('future');
+    }
+  })
+};
+
+
+// call trackTask
+trackTask();
+
 //call showtime and make it update each second
-showtime()
-setInterval(showtime, 1000)
+showtime();
+setInterval(showtime, 1000);
